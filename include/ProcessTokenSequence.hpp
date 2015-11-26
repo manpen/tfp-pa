@@ -45,7 +45,6 @@ protected:
 
    //! Returns false if a new vertex was "produced"
    bool _processToken(const Token & token) {
-      std::cout << token << std::endl;
       if (token.query()) {
          assert(_current_idx -1 == token.id());
          Token64 new_token(false, token.value(), _current_vertex);

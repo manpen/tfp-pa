@@ -23,16 +23,17 @@
 #include <stxxl/bits/common/uint_types.h>
 #include <stxxl/bits/unused.h>
 
+#include <FileDataType.hpp>
+
 /**
  * @brief Edge Output for Decision Tree producing a binary edge list file
  *
- * @tparam FileT Type for vertex indices in the output file.
- *               A cast from std::uint64 to FileT has to be possible.
+ * @tparam out_type Type for vertex indices in the output file.
+ *               A cast from std::uint64 to out_type has to be possible.
  */
-template <typename FileT = stxxl::uint40>
 class EdgeWriter {
-   using out_type = FileT;
-   using vector_type = typename stxxl::VECTOR_GENERATOR<FileT, 4u, 8u, 10485760u>::result;
+   using out_type = DefaultFileDataType::data_type;
+   using vector_type = DefaultFileDataType::vector_type;
    using bufwriter_type = typename vector_type::bufwriter_type;
 
    stxxl::linuxaio_file _file;
@@ -68,7 +69,7 @@ public:
       }
 
       STXXL_VERBOSE0(
-            "EdgeWriter with " << sizeof(FileT) << "b per node to "
+            "EdgeWriter with " << sizeof(out_type) << "b per node to "
             << filename << " initialised; Expect " << expected_num_elems << " elements"
       );
    }
@@ -96,7 +97,7 @@ public:
 
       uint64_t vertices = 0;
       for(; !stream.empty(); ++stream) {
-         _writer << FileT(stxxl::uint64(*stream));
+         _writer << DefaultFileDataType::fromInternal(*stream);
          vertices++;
       }
       _edges_written += vertices / 2;
@@ -112,8 +113,8 @@ public:
 
       for(; !stream.empty(); ++stream) {
          auto pair = *stream;
-         _writer << FileT(stxxl::uint64(pair.first))
-                 << FileT(stxxl::uint64(pair.second));
+         _writer << DefaultFileDataType::fromInternal(pair.first)
+                 << DefaultFileDataType::fromInternal(pair.second);
          _edges_written++;
       }
    }
@@ -122,7 +123,7 @@ public:
    //! Returns the number of bytes per vertex used in the output file.
    //! If I/O is disabled 0 is returned.
    size_t bytesPerVertex() const {
-      return (!_disable_output) * sizeof(FileT);
+      return (!_disable_output) * sizeof(out_type);
    }
 
    //! Returns the corrected file size (i.e. the file's size if the destructor were called at the moment in time).

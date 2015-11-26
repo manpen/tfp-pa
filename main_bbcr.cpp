@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 
       cp.add_param_string("filename", output_file, "Path to output file");
 
-      stxxl::uint64 edges, seed_verts;
+      stxxl::uint64 edges, seed_verts=100;
       cp.add_param_bytes("no-edges", edges, "Number of random edges; positive");
       cp.add_bytes('n', "seed-vertices", seed_verts, "Number of seed vertices");
 
@@ -142,7 +142,7 @@ int main(int argc, char* argv[]) {
    ProcessTokenSequence<decltype(merger), decltype(prio_queue)> process(merger, prio_queue);
 
    // Write graph into file
-   EdgeWriter<> edge_writer(output_file, seedTokens.numberOfEdges() + number_of_edges);
+   EdgeWriter edge_writer(output_file, seedTokens.numberOfEdges() + number_of_edges);
 
    if (filter_self_loops || filter_multi_edges) {
       EdgeSorter<decltype(process)> sortedEdges(process, sorter_size);

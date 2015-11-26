@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) {
    ProcessTokenSequence<decltype(merger), decltype(prio_queue)> process(merger, prio_queue);
 
    // Write graph into file
-   EdgeWriter<> edge_writer(output_file, seedTokens.numberOfEdges() + number_of_vertices*edges_per_vertex);
+   EdgeWriter edge_writer(output_file, seedTokens.numberOfEdges() + number_of_vertices*edges_per_vertex);
 
 
    if (filter_self_loops || filter_multi_edges) {
