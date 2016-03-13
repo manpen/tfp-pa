@@ -16,21 +16,16 @@
 ############################################################################
 
 enable_testing()
-find_package(GTest)
 
-#if (GTest_FOUND)
-message(STATUS "GTEST_INCLUDE_DIRS: ${GTEST_INCLUDE_DIRS}")
-include_directories(${GTEST_INCLUDE_DIRS} /home/manpen/documents/code/googletest/googletest/include)
+include_directories(${gtest_SOURCE_DIR} ${gtest_SOURCE_DIR}/include)
 
 file(GLOB SRCS *.cpp)
 
 add_executable(tests ${SRCS})
 
 target_link_libraries(tests
-        /home/manpen/documents/code/googletest/googletest/build/libgtest.a
-        /home/manpen/documents/code/googletest/googletest/build/libgtest_main.a
-        ${GTEST_BOTH_LIBRARIES}
-        ${STXXL_LIBRARIES}
+       gtest gtest_main
+       ${STXXL_LIBRARIES}
 )
 
 add_test(tests tests)

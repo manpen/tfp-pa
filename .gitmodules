@@ -1,0 +1,7 @@
+[submodule "libs/stxxl"]
+        path = libs/stxxl
+        url = https://github.com/stxxl/stxxl
+[submodule "libs/googletest"]
+        path = libs/googletest
+        url = https://github.com/google/googletest.git
+

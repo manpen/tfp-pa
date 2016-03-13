@@ -1,52 +1,31 @@
 TFP-GraphGenerator
 ==================
 
-This repository contains preferential attachment graph generators able to produce
-graphs not fitting into main memory. The underlying idea is introduced in
+This repository contains preferential attachment-based generators for graphs
+that do not fit into main memory. The underlying idea is introduced in
 "Generating Massive Scale-Free Networks under Resource Constraints", U.Meyer
 and M.Penschuck, ALENEX16. This implementation, however, uses vertex-based tokens
-rather edge based, which better fits the POT-constraints imposed by the STXXL.
+rather edge based, which better fits the POD-constraints imposed by the STXXL.
 
-Building
---------
-This generators make heavy use of STXXL <http://stxxl.sourceforge.net/> and requires
-a version NEWER than 1.4. If it is not yet installed you can do using the following
-commands:
+Resolving Dependencies
+----------------------
+The generators depend on [STXXL](http://stxxl.sourceforge.net) and 
+[Google Test](https://github.com/google/googletest). The libraries are added as
+git submodules and hence need to be initialized before the first build.
 
-    cd {INSTALLATION-DIR}
-    git clone https://github.com/stxxl/stxxl
-    cd stxxl
-    mkdir build
-    cd build
-    cmake ..
-    make -j 4
-
-Afterwards set the environment variable STXXL_DIR="{INSTALLATION-DIR}/stxxl/build", e.g.
-by adding
-
-    export STXXL_DIR="{INSTALLATION-DIR}/stxxl/build"
-
-to your .bashrc / .profile (or similar) and reloading your shell.
-
-If you want to build the test suite GTest has to be installed and the environment
-variables have to be set accordingly.
-
-In order to build the graph generators navigate into its root directory and execute:
-
-    mkdir build
-    cd build
-    cmake -DCMAKE_BUILD_TYPE=Release ..
-    make -j 4
+    git submodule init
+    git submodule update
 
 Edge-List-Format
 ----------------
-All generators produce a binary edge vectors which fully represent the graphs.
-By default each vertex is represented by a 64-bit unsigned integer, however smaller
-data types (32, 40, 48) are supported. Just edit the "-DFILE_DATA_WIDTH=" parameter
+Each generator produces an edge vector which fully represents the graph:
+An output file contains a sequence of std::pair<NodeT, NodeT> where NodeT the
+unsigned integer used to represent a node id: By default it is a 64-bit unsigned integer,
+however smaller data types (32, 40, 48) are supported. Just edit the "-DFILE_DATA_WIDTH=" parameter
 in CMakeLists.txt and recompile; the 40-bit / 48-bit types correspond to the STXXL::uintX
 types.
 
-The files does not have a header but only contains the binary vector ids. Two
+An output file does not have a header but only contains the binary vector ids. Two
 consecutive entries for an edge (from, to). In an undirected graph only one edge
 with (from < to) is stored.
 
@@ -55,7 +34,7 @@ Barabasi-Albert-Generator
 Usage: ./tfp_ba [options] <filename> <no-vertices> <edges-per-vert>
 
 The Barabasi-Albert model yields undirected scale-free graphs. Given a small seed graph
-(in our case a ring with 2*<edges-per-vert> vertices) a edge is introduce and connected
+(in our case a ring with 2*<edges-per-vert> vertices) an edge is introduce and connected
 to <edges-per-vert> existing vertices. This procedure is repeated until <no-vertices>
 vertices are added. We allow multi-edges during this process (use -m to later remove them;
 this will however affect the average degree in the graph).
