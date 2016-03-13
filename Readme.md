@@ -15,6 +15,8 @@ git submodules and hence need to be initialized before the first build.
 
     git submodule init
     git submodule update
+    
+Please note that the ./compile.sh script includes this steps.    
 
 Edge-List-Format
 ----------------
