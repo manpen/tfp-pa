@@ -19,7 +19,7 @@ enable_testing()
 
 include_directories(${gtest_SOURCE_DIR} ${gtest_SOURCE_DIR}/include)
 
-file(GLOB SRCS *.cpp)
+file(GLOB SRCS Test*.cpp)
 
 add_executable(tests ${SRCS})
 
@@ -29,3 +29,6 @@ target_link_libraries(tests
 )
 
 add_test(tests tests)
+
+add_executable(im_bfs main_im_bfs.cpp)
+target_link_libraries(im_bfs ${STXXL_LIBRARIES})
