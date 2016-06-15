@@ -23,9 +23,11 @@
 class TestReservoirSampling : public ::testing::Test {};
 
 TEST_F(TestReservoirSampling, Uniformity) {
-    constexpr uint64_t elements = 1llu << 30;
-    constexpr uint64_t reservoir_size = 1llu << 16;
-    constexpr uint64_t no_buckets = reservoir_size / 256;
+    constexpr uint64_t elements = 1llu << 28;
+    constexpr uint64_t reservoir_size = elements >> 12;
+    constexpr uint64_t no_buckets = 32;
+
+    constexpr double avg_samples_in_bucket = reservoir_size / no_buckets;
 
     ReservoirSampling<uint64_t> res(reservoir_size);
 
@@ -40,21 +42,20 @@ TEST_F(TestReservoirSampling, Uniformity) {
     constexpr uint64_t bucket_size = (elements + no_buckets - 1) / no_buckets;
     std::sort(res.begin(), res.end());
     uint64_t last_element = 0;
-    for(auto it = res.begin(); it != res.end(); ++it, ++samples) {
-        ASSERT_GT(*it, last_element);
-        ASSERT_LT(*it, elements);
 
-        bins.at(*it / bucket_size)++;
+    for(auto it = res.begin(); it != res.end(); ++it, ++samples) {
+        EXPECT_GT(*it, last_element);
+        ASSERT_LE(*it, elements);
+
+        bins.at((*it-1) / bucket_size)++;
         last_element = *it;
     }
 
     // verify distribution
     ASSERT_EQ(samples, reservoir_size);
     std::vector<uint32_t> sorted_bins(bins);
-    std::sort(sorted_bins.begin(), sorted_bins.end());
 
-    for(auto & i : sorted_bins)
-        std::cout << i << " ";
-    std::cout << std::endl;
-
+    ASSERT_NEAR(sorted_bins.front(), avg_samples_in_bucket, 0.2*avg_samples_in_bucket);
+    ASSERT_NEAR(sorted_bins.back(), avg_samples_in_bucket, 0.2*avg_samples_in_bucket);
+    ASSERT_NEAR(sorted_bins[sorted_bins.size()/2], avg_samples_in_bucket, 0.05*avg_samples_in_bucket);
 }

@@ -43,18 +43,18 @@ public:
     //! Initialize and allocate a reservoir of requested size.
     //! @param reservoir_size has to be positive
     ReservoirSampling(size_t reservoir_size)
-        : _reservoir(reservoir_size)
-        , _reservoir_target_size(reservoir_size)
+        : _reservoir_target_size(reservoir_size)
         , _elements_pushed(0)
     {
         assert(reservoir_size > 0);
+        _reservoir.reserve(reservoir_size);
     }
 
     //! Add element to reservoir with probability of reservoir_size / n,
     //! where n-1 is the number of elements previously pushed.
     void push(const T& d) {
         ++_elements_pushed;
-        if (UNLIKELY(_reservoir_target_size <= _elements_pushed)) {
+        if (UNLIKELY(_reservoir_target_size >= _elements_pushed)) {
             // Initial fill
             _reservoir.push_back(d);
         } else {
