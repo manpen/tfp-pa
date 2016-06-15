@@ -81,7 +81,7 @@ public:
 
     //! Returns an iterator to a sample drawn uniformly from reservoir
     const iterator sample() const {
-        assert(!_empty());
+        assert(!empty());
         IndexType r = Random::randint(_reservoir.size());
         return _reservoir.begin() + r;
 

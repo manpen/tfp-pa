@@ -24,7 +24,7 @@ file(GLOB SRCS Test*.cpp)
 add_executable(tests ${SRCS})
 
 target_link_libraries(tests
-       gtest gtest_main
+       gtest_main gtest
        ${STXXL_LIBRARIES}
 )
 
