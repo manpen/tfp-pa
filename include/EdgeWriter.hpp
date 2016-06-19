@@ -41,6 +41,7 @@ class EdgeWriter {
    bufwriter_type _writer;
 
    uint64_t _edges_written;
+   int _nodes_written;
 
    bool _disable_output;
 
@@ -62,6 +63,7 @@ public:
          , _vector(&_file)
          , _writer(_vector.begin())
          , _edges_written(0)
+         , _nodes_written(0)
          , _disable_output(false)
    {
       if (expected_num_elems) {
@@ -119,6 +121,12 @@ public:
       }
    }
 
+   //! Write single edge
+   void operator()(const uint64_t & n1, const uint64_t & n2) {
+      _writer << DefaultFileDataType::fromInternal(n1);
+      _writer << DefaultFileDataType::fromInternal(n2);
+      _edges_written++;
+   }
 
    //! Returns the number of bytes per vertex used in the output file.
    //! If I/O is disabled 0 is returned.
