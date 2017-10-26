@@ -1,10 +1,10 @@
-TFP-GraphGenerator
+ External Memory Graph Generators using Preferential Attachment 
 ==================
 
 This repository contains preferential attachment-based generators for graphs
 that do not fit into main memory. The underlying idea is introduced in
-"Generating Massive Scale-Free Networks under Resource Constraints", U.Meyer
-and M.Penschuck, ALENEX16. This implementation, however, uses vertex-based tokens
+["Generating Massive Scale-Free Networks under Resource Constraints", U.Meyer
+and M.Penschuck, ALENEX16](https://doi.org/10.1137/1.9781611974317.4). This implementation, however, uses vertex-based tokens
 rather edge based, which better fits the POD-constraints imposed by the STXXL.
 
 Resolving Dependencies
@@ -16,7 +16,8 @@ git submodules and hence need to be initialized before the first build.
     git submodule init
     git submodule update
     
-Please note that the ./compile.sh script includes this steps.    
+Please note that the ./compile.sh script includes this steps.
+Also, it is crucial that you checkout this repository rathern than downloading it as a Zip-Snapshot.
 
 Edge-List-Format
 ----------------
@@ -47,7 +48,7 @@ distribution. Use the -d option, to sample the neighbors "sequentially", i.e. to
 the shifted probability distribution of earlier edges into account. In this mode, self-loops
 are possible, which can be later removed using the -s option.
 
-Directed PA by B Bollobas, C. Borgs, J. Chayes, O. Riordan
+"Directed scale-free graphs" by B Bollobas, C. Borgs, J. Chayes, and O. Riordan, SODA03
 ----------------------------------------------------------
 Usage: ./tfp_bbcr [options] <filename> <no-edges>
 
