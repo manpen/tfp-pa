@@ -22,8 +22,6 @@ add_subdirectory(libs/googletest/googletest)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -g")
 set(CMAKE_CXX_FLAGS_DEBUG  "${CMAKE_CXX_FLAGS_DEBUG} -Og")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFILE_DATA_WIDTH=64")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native -msse4")
-
 
 check_cxx_compiler_flag( -flto GXX_HAS_LTO_FLAG )
 if( CMAKE_BUILD_TYPE MATCHES Release AND GXX_HAS_LTO_FLAG )
@@ -58,9 +56,6 @@ include_directories(include)
 
 add_executable(tfp_ba main_ba.cpp)
 target_link_libraries(tfp_ba ${STXXL_LIBRARIES})
-
-add_executable(ptfp_ba main_pba.cpp)
-target_link_libraries(ptfp_ba ${STXXL_LIBRARIES})
 
 add_executable(tfp_bbcr main_bbcr.cpp)
 target_link_libraries(tfp_bbcr ${STXXL_LIBRARIES})
